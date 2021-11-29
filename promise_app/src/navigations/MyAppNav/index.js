@@ -12,11 +12,6 @@ import AlarmAdd from '../../pages/AlarmAdd';
 import AlarmInfo from '../../pages/AlarmInfo';
 import Alarm from '../../pages/Alarm';
 import Timeline from '../../pages/Timeline';
-import CommunityPage from '../../pages/Community';
-import CommunitySearchPage from '../../pages/CommunitySearchPage';
-import PostCreatePage from '../../pages/PostCreate';
-import PostUpdatePage from '../../pages/PostUpdate';
-import PostDetailPage from '../../pages/PostDetail';
 import TimelineDetail from '../../pages/TimelineDetail';
 import Mypage from '../../pages/Mypage';
 import ModifyInfo from '../../pages/ModifyInfo';
@@ -86,21 +81,6 @@ const MyApp = () => {
             <TopTab.Screen name='Alarm' component={AlarmNav} options={{title:'알람'}} />
             <TopTab.Screen name='Timeline' component={TimelineNav} options={{title:'이력'}}/>
         </TopTab.Navigator>
-      );
-    }
-
-    function CommunityNav() {
-      return (
-        <Stack.Navigator screenOptions={{
-          headerTitleAlign: 'center',
-          initialRouteName:'community'
-          }}>
-          <Stack.Screen name='community' component={CommunityPage} options={{title:'커뮤니티'}}/>
-          <Stack.Screen name='communitysearch' component={CommunitySearchPage} options={{title:'검색 결과'}}/>
-          <Stack.Screen name='communitywrite' component={PostCreatePage} options={{title:'글 작성'}}/>
-          <Stack.Screen name='communityupdate' component={PostUpdatePage} options={{title:'글 수정'}}/>
-          <Stack.Screen name='communitydetail' component={PostDetailPage} options={{title:''}}/>
-        </Stack.Navigator>
       );
     }
 
