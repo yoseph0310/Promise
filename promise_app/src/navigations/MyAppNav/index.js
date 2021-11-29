@@ -198,7 +198,6 @@ const MyApp = () => {
           <Tab.Screen name="Home" component={HomeNav} options={{tabBarLabel:'홈'}}/>
           <Tab.Screen name="Pharmacy" component={Pharmacy} options={{ title: '약국' }} />
           <Tab.Screen name="CalendarPage" component={TopTabStackScreen} options={{ title: '일정' }} />
-          <Tab.Screen name='CommunityScreen' component={CommunityNav} options={{ title: '커뮤니티' }}/>
           <Tab.Screen name="Mypage" component={MyPageNav} options={{ title: '내 정보' }}/>
         </Tab.Navigator>
         )
