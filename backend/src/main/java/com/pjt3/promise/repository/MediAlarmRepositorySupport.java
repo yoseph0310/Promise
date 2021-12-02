@@ -62,7 +62,7 @@ public class MediAlarmRepositorySupport {
     			qMediAlarm.alarmId, qMediAlarm.alarmTitle,
     			qMediAlarm.alarmDayStart, qMediAlarm.alarmDayEnd))
     			.from(qMediAlarm)
-    			.where(qMediAlarm.user.eq(user), qMediAlarm.alarmYN.eq(1),
+    			.where(qMediAlarm.user.eq(user),
     					qMediAlarm.alarmDayStart.loe(nowDate), qMediAlarm.alarmDayEnd.goe(nowDate))
     			.orderBy(qMediAlarm.alarmId.desc())
     			.fetch();
@@ -74,7 +74,7 @@ public class MediAlarmRepositorySupport {
     			qMediAlarm.alarmId, qMediAlarm.alarmTitle,
     			qMediAlarm.alarmDayStart, qMediAlarm.alarmDayEnd))
     			.from(qMediAlarm)
-    			.where(qMediAlarm.user.eq(user), qMediAlarm.alarmYN.eq(1),
+    			.where(qMediAlarm.user.eq(user),
     					qMediAlarm.alarmDayEnd.lt(today), qMediAlarm.alarmDayEnd.goe(startDay))
     			.orderBy(qMediAlarm.alarmId.desc())
     			.fetch();
