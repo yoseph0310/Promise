@@ -31,5 +31,5 @@ public interface AlarmService {
 
 	List<AlarmCalendarGetRes> getMonthAlarmList(User user, String nowMonth);
 
-	List<AlarmMainGetRes> getMainAlarmList(User user);
+	AlarmMainGetRes getMainAlarmList(User user);
 }

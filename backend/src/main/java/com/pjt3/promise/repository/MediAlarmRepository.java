@@ -13,4 +13,5 @@ import com.pjt3.promise.entity.User;
 @Repository
 public interface MediAlarmRepository extends JpaRepository<MediAlarm, Integer> {
 	MediAlarm findMediAlarmByAlarmId(int alarmId);
+	long countByUser(User user);
 }

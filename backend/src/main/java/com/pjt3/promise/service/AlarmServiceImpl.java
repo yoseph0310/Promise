@@ -37,6 +37,7 @@ import com.pjt3.promise.response.AlarmCalendarGetRes;
 import com.pjt3.promise.response.AlarmDetailGetRes;
 import com.pjt3.promise.response.AlarmGetRes;
 import com.pjt3.promise.response.AlarmMainGetRes;
+import com.pjt3.promise.response.AlarmMainListGetRes;
 import com.pjt3.promise.response.AlarmOCRRes;
 
 @Service
@@ -335,11 +336,17 @@ public class AlarmServiceImpl implements AlarmService {
 	}
 
 	@Override
-	public List<AlarmMainGetRes> getMainAlarmList(User user) {
+	public AlarmMainGetRes getMainAlarmList(User user) {
+		AlarmMainGetRes alarmMainGetRes = new AlarmMainGetRes();
 		LocalDate now = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String today = now.format(formatter);
-		List<AlarmMainGetRes> alarmList = mediAlarmRepositorySupport.getMainAlarmList(user, today);
-		return alarmList;
+		List<AlarmMainListGetRes> alarmList = mediAlarmRepositorySupport.getMainAlarmList(user, today);
+		alarmMainGetRes.setAlarmList(alarmList);
+		long count = mediAlarmRepository.countByUser(user);
+		if(count > 0) alarmMainGetRes.setPreAlarm(true);
+		else alarmMainGetRes.setPreAlarm(false);
+		
+		return alarmMainGetRes;
 	}
 }
