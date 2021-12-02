@@ -277,12 +277,9 @@ public class AlarmController {
 			PMUserDetails userDetails = (PMUserDetails) authentication.getDetails();
 			User user = userDetails.getUser();
 
-			List<AlarmMainGetRes> alarmList = alarmService.getMainAlarmList(user);
+			AlarmMainGetRes alarmMainGetRes = alarmService.getMainAlarmList(user);
 
-			Map<String, List> map = new HashMap<String, List>();
-			map.put("alarmList", alarmList);
-
-			return ResponseEntity.status(200).body(map);
+			return ResponseEntity.status(200).body(alarmMainGetRes);
 
 		} catch (NullPointerException e) {
 			return ResponseEntity.status(420).body(BaseResponseBody.of(420, "만료된 토큰입니다."));

@@ -14,6 +14,7 @@ import com.pjt3.promise.response.AlarmCalendarGetRes;
 import com.pjt3.promise.response.AlarmDetailGetRes;
 import com.pjt3.promise.response.AlarmGetRes;
 import com.pjt3.promise.response.AlarmMainGetRes;
+import com.pjt3.promise.response.AlarmMainListGetRes;
 import com.pjt3.promise.response.MediPillGetRes;
 import com.pjt3.promise.response.MyAlarmHistory;
 import com.pjt3.promise.response.MyPillGetRes;
@@ -146,8 +147,8 @@ public class MediAlarmRepositorySupport {
 		return calendarAlarmList;
 	}
 
-	public List<AlarmMainGetRes> getMainAlarmList(User user, String today) {
-		List<AlarmMainGetRes> alarmList = query.select(Projections.bean(AlarmMainGetRes.class,
+	public List<AlarmMainListGetRes> getMainAlarmList(User user, String today) {
+		List<AlarmMainListGetRes> alarmList = query.select(Projections.bean(AlarmMainListGetRes.class,
     			qMediAlarm.alarmId, qMediAlarm.alarmTitle,
     			qMediAlarm.alarmTime1, qMediAlarm.alarmTime2, qMediAlarm.alarmTime3))
     			.from(qMediAlarm)
