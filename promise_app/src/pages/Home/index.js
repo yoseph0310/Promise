@@ -1,7 +1,7 @@
 import React, {useState, useCallback } from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import { View,Dimensions, Alert } from 'react-native';
-import Carousel from '../../components/Carousel';
+import ChartPage from '../../pages/ChartPage';
 import {myinfo, sharingList, sharingAccept, sharingReject, getAlarmDetail} from '../../utils/axios';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { getMyInfoAction } from '../../modules/user/actions';
@@ -123,12 +123,7 @@ const HomePage = ({navigation}) => {
     return (
         <View  style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'#F9F9F9' }}>
             <Spinner visible={spinVisible} />
-            <Carousel
-            gap={0}
-            offset={0}
-            pages={PAGES}
-            pageWidth={screenWidth}
-            />
+            <ChartPage/>
         </View>
     );
 };
