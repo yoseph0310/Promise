@@ -13,6 +13,7 @@ import AlarmInfo from '../../pages/AlarmInfo';
 import Alarm from '../../pages/Alarm';
 import Timeline from '../../pages/Timeline';
 import TimelineDetail from '../../pages/TimelineDetail';
+import AlarmDetail from '../../pages/AlarmDetail';
 import Mypage from '../../pages/Mypage';
 import ModifyInfo from '../../pages/ModifyInfo';
 import MyPillNowPill from '../../pages/MyPillNowPill';
@@ -50,6 +51,7 @@ const MyApp = () => {
         >
           <Stack.Screen name="AlarmScreen" component={Alarm} />
           <Stack.Screen name="AlarmInfo" component={AlarmInfo} />
+          <Stack.Screen name="AlarmDetail" component={AlarmDetail} />
         </Stack.Navigator>
       )
     }
