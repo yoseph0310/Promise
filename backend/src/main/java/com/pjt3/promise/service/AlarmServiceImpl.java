@@ -106,16 +106,17 @@ public class AlarmServiceImpl implements AlarmService {
 				// 대상자를 찾고
 				User sharedUser = userRepository.findUserByUserEmail(sharedEmail);
 
-				// 알람 저장
-				mediAlarm = mediAlarmSetting(sharedUser, alarmPostReq);
-				mediAlarmRepository.save(mediAlarm);
-
-				// 약 내역 저장
-				userMedicineSetting(mediAlarm, alarmPostReq.getAlarmMediList());
-
+				// 공유 알람 저장
 				AlarmShare alarmShare = new AlarmShare();
-				alarmShare.setMediAlarm(mediAlarm);
-				alarmShare.setUser(user);
+				alarmShare.setUser(sharedUser);
+				alarmShare.setSendUser(user);
+				alarmShare.setAlarmTitle(alarmPostReq.getAlarmTitle());
+				alarmShare.setAlarmYN(1);
+				alarmShare.setAlarmTime1(alarmPostReq.getAlarmTime1());
+				alarmShare.setAlarmTime2(alarmPostReq.getAlarmTime2());
+				alarmShare.setAlarmTime3(alarmPostReq.getAlarmTime3());
+				alarmShare.setAlarmDayStart(alarmPostReq.getAlarmDayStart());
+				alarmShare.setAlarmDayEnd(alarmPostReq.getAlarmDayEnd());
 
 				alarmShareRepository.save(alarmShare);
 
@@ -337,11 +338,13 @@ public class AlarmServiceImpl implements AlarmService {
 
 	@Override
 	public AlarmMainGetRes getMainAlarmList(User user) {
+		
 		AlarmMainGetRes alarmMainGetRes = new AlarmMainGetRes();
 		LocalDate now = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String today = now.format(formatter);
 		List<AlarmMainListGetRes> alarmList = mediAlarmRepositorySupport.getMainAlarmList(user, today);
+		
 		alarmMainGetRes.setAlarmList(alarmList);
 		long count = mediAlarmRepository.countByUser(user);
 		if(count > 0) alarmMainGetRes.setPreAlarm(true);

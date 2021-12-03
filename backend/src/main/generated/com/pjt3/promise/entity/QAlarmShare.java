@@ -22,9 +22,23 @@ public class QAlarmShare extends EntityPathBase<AlarmShare> {
 
     public static final QAlarmShare alarmShare = new QAlarmShare("alarmShare");
 
+    public final StringPath alarmDayEnd = createString("alarmDayEnd");
+
+    public final StringPath alarmDayStart = createString("alarmDayStart");
+
+    public final StringPath alarmTime1 = createString("alarmTime1");
+
+    public final StringPath alarmTime2 = createString("alarmTime2");
+
+    public final StringPath alarmTime3 = createString("alarmTime3");
+
+    public final StringPath alarmTitle = createString("alarmTitle");
+
+    public final NumberPath<Integer> alarmYN = createNumber("alarmYN", Integer.class);
+
     public final NumberPath<Integer> asId = createNumber("asId", Integer.class);
 
-    public final QMediAlarm mediAlarm;
+    public final QUser sendUser;
 
     public final QUser user;
 
@@ -46,7 +60,7 @@ public class QAlarmShare extends EntityPathBase<AlarmShare> {
 
     public QAlarmShare(Class<? extends AlarmShare> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.mediAlarm = inits.isInitialized("mediAlarm") ? new QMediAlarm(forProperty("mediAlarm"), inits.get("mediAlarm")) : null;
+        this.sendUser = inits.isInitialized("sendUser") ? new QUser(forProperty("sendUser"), inits.get("sendUser")) : null;
         this.user = inits.isInitialized("user") ? new QUser(forProperty("user"), inits.get("user")) : null;
     }
 

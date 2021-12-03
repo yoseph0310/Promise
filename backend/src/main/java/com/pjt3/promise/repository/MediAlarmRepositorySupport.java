@@ -155,6 +155,15 @@ public class MediAlarmRepositorySupport {
     			.where(qMediAlarm.user.eq(user), qMediAlarm.alarmDayStart.loe(today), qMediAlarm.alarmDayEnd.goe(today))
     			.orderBy(qMediAlarm.alarmId.asc())
     			.fetch();
+		
+		for(AlarmMainListGetRes item : alarmList) {
+			int id = item.getAlarmId();
+			List<String> mediList = query.select(qUserMedicine.umName)
+					.from(qUserMedicine)
+					.where(qUserMedicine.mediAlarm.alarmId.eq(id))
+					.fetch();
+			item.setMediList(mediList);
+		}
 		return alarmList;
 	}
 
