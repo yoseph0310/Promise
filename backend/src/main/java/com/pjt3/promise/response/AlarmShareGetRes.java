@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class AlarmShareGetRes {
+	private int asId;
 	private String userNickname;
-	private int alarmId;
+	private String alarmTitle;
 }
