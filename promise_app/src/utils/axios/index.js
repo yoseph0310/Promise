@@ -124,11 +124,11 @@ export const getVisual = async () => {
     });
 };
 
-export const getPeriod = async (periodType) => {
-  return await request.get(`/alarms/${periodType}`, {
+export const getPeriod = async (pageNum) => {
+  return await request.get(`/alarms/${pageNum}`, {
     })
     .then(response => {
-      return response.data.alarmList;
+      return response.data;
     }).catch(err => {
       return err.response.data;
     });
