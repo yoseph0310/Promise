@@ -12,16 +12,20 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pjt3.promise.entity.AlarmShare;
+import com.pjt3.promise.entity.AlarmShareUserMedicine;
 import com.pjt3.promise.entity.MediAlarm;
 import com.pjt3.promise.entity.Tag;
 import com.pjt3.promise.entity.TakeHistory;
 import com.pjt3.promise.entity.User;
 import com.pjt3.promise.entity.UserMedicine;
 import com.pjt3.promise.repository.AlarmShareRepository;
+import com.pjt3.promise.repository.AlarmShareUserMedicineRepository;
 import com.pjt3.promise.repository.MediAlarmRepository;
 import com.pjt3.promise.repository.MediAlarmRepositorySupport;
 import com.pjt3.promise.repository.MedicineRepository;
@@ -75,7 +79,11 @@ public class AlarmServiceImpl implements AlarmService {
 
 	@Autowired
 	MedicineRepositorySupport medicineRepositorySupport;
+	
+	@Autowired
+	AlarmShareUserMedicineRepository AlarmShareUserMedicineRepository;
 
+	@Transactional
 	@Override
 	public int insertAlarm(User user, AlarmPostReq alarmPostReq) {
 
@@ -120,7 +128,9 @@ public class AlarmServiceImpl implements AlarmService {
 				alarmShare.setAlarmDayEnd(alarmPostReq.getAlarmDayEnd());
 
 				alarmShareRepository.save(alarmShare);
-
+				
+				// 알람 공유 약 저장
+				alarmShareUserMedicineSetting(alarmShare, alarmPostReq.getAlarmMediList());
 			}
 
 			return mediAlarm.getAlarmId();
@@ -152,6 +162,19 @@ public class AlarmServiceImpl implements AlarmService {
 		return mediAlarm;
 	}
 
+	public void alarmShareUserMedicineSetting(AlarmShare alarmShare, List<String> alarmMediList) {
+		for (String mediName : alarmMediList) {
+
+			AlarmShareUserMedicine alarmShareUserMedicine = new AlarmShareUserMedicine();
+			alarmShareUserMedicine.setAlarmShare(alarmShare);
+			alarmShareUserMedicine.setAsumName(mediName);
+			alarmShareUserMedicine.setMedicine(medicineRepository.findMedicineByMediName(mediName));
+
+			AlarmShareUserMedicineRepository.save(alarmShareUserMedicine);
+		}
+
+	}
+	
 	public void userMedicineSetting(MediAlarm mediAlarm, List<String> alarmMediList) {
 		for (String mediName : alarmMediList) {
 

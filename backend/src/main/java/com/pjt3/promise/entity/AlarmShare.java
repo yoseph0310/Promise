@@ -6,8 +6,11 @@ import lombok.Setter;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -51,5 +54,9 @@ public class AlarmShare {
 
     @Column(name="alarm_day_end")
     String alarmDayEnd;
+    
+    @JsonManagedReference
+    @OneToMany(mappedBy="alarmShare")
+    List<AlarmShareUserMedicine> alarmShareUserMedicine = new ArrayList<AlarmShareUserMedicine>();
     
 }

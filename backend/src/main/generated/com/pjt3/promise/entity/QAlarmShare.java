@@ -26,6 +26,8 @@ public class QAlarmShare extends EntityPathBase<AlarmShare> {
 
     public final StringPath alarmDayStart = createString("alarmDayStart");
 
+    public final ListPath<AlarmShareUserMedicine, QAlarmShareUserMedicine> alarmShareUserMedicine = this.<AlarmShareUserMedicine, QAlarmShareUserMedicine>createList("alarmShareUserMedicine", AlarmShareUserMedicine.class, QAlarmShareUserMedicine.class, PathInits.DIRECT2);
+
     public final StringPath alarmTime1 = createString("alarmTime1");
 
     public final StringPath alarmTime2 = createString("alarmTime2");
