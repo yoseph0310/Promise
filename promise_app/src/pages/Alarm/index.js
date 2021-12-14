@@ -9,6 +9,7 @@ import {getAlarmlist} from '../../utils/axios';
 const Alarm = (props) => {
     const [alarmList, setAlarmList] = useState([]);
     const [spinVisible, setSpinvisible] = useState();
+    let today = Moment().format('YYYY-MM-DD');
     const gettingList = async()=>{
         setSpinvisible(true);
         let day = Moment().format('YYYY-MM-DD');
@@ -32,9 +33,15 @@ const Alarm = (props) => {
         let result = [];
         if(alarmList.length>0){
             alarmList.map(item=>{
-                result = result.concat(
-                    <MediInfo naviagtion = {props.navigation} func={(alarmId)=>props.navigation.navigate('AlarmInfo',{data:alarmId})} alarmTitle={item.alarmTitle} alarmId={item.alarmId} alarmDayStart={item.alarmDayStart} alarmDayEnd = {item.alarmDayEnd}/>
+                if(item.alarmDayEnd<today){
+                    result = result.concat(
+                        <MediInfo naviagtion = {props.navigation} func={(alarmId)=>props.navigation.navigate('AlarmDetail',{data:alarmId})} alarmId={item.alarmId} alarmDayStart={item.alarmDayStart} alarmTitle = {item.alarmTitle} alarmDayEnd = {item.alarmDayEnd}/>
                 );
+                }else{
+                    result = result.concat(
+                        <MediInfo naviagtion = {props.navigation} func={(alarmId)=>props.navigation.navigate('AlarmInfo',{data:alarmId})} alarmTitle={item.alarmTitle} alarmId={item.alarmId} alarmDayStart={item.alarmDayStart} alarmDayEnd = {item.alarmDayEnd}/>
+                    );
+                }
             })
         }
         return result;

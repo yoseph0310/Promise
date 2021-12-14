@@ -11,7 +11,7 @@ import {getAlarmDetail} from '../../utils/axios';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DivideLine from '../../components/frames/DivideLine';
 
-const TimelineDetail = (props) => {
+const AlarmDetail = (props) => {
     const [title, onChangeTitle] = useState('');
     const [isOn, setIsOn] = useState(false);
     const [pillList, setPillList] = useState([]);
@@ -95,7 +95,7 @@ const TimelineDetail = (props) => {
             <View style={{width: '90%', alignItems: 'flex-start', marginTop: 10}}>
             <Icon.Button name="left" color="black" backgroundColor="white" size={25} onPress={() => props.navigation.goBack()} />
             </View>
-            <ScrollView style={{width: '100%', margin: 10}} contentContainerStyle={{alignItems: 'center', margin: 10}}>
+            <ScrollView style={{width: '100%'}} contentContainerStyle={{alignItems: 'center', margin: 10}}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', justifyContent: 'flex-start', height: 40, marginBottom:10 }}>
                     <Text style={{ fontSize: 25, color: 'black', fontWeight: 'bold', width: '20%' }}>{title}</Text>
                 </View>
@@ -138,4 +138,4 @@ const TimelineDetail = (props) => {
         </View>
     );
 };
-export default TimelineDetail;
+export default AlarmDetail;

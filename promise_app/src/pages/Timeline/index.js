@@ -1,140 +1,64 @@
 import React, {useState, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import { View, ScrollView, Platform, StyleSheet, Text } from 'react-native';
-import MediInfo from '../../components/atoms/MediInfo';
-import RNPickerSelect from 'react-native-picker-select';
-import Icon from 'react-native-vector-icons/AntDesign';
+import { View, Text, FlatList } from 'react-native';
+import TimelineInfo from '../../components/TimelineInfo';
 import { getPeriod } from '../../utils/axios';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const Timeline = (props) => {
     const [spinVisible, setSpinvisible] = useState();
-    const [value, setValue] = useState('');
-    const [platform, setPlatform] = useState();
     const [alarmList, setAlarmList] = useState([]);
+    const [totalPageCnt, setTotalPageCnt] = useState();
+    const [pageNum, setPageNum] = useState(1);
+    const [loading, setloading] = useState(false);
 
-    function findPlatform(){
-        let result = [];
-        if (platform==='android'){
-            result = result.concat(
-                <View style={{width:'58%', backgroundColor:'white', borderRadius:20, height:35, margin:10, marginRight:0, justifyContent: 'center'}}>
-                    <RNPickerSelect
-                        value={value}
-                        onValueChange={(value)=>gettingList(value)} 
-                        items={[
-                            {label:'이번 주', value:'week'},
-                            {label:'이번 달', value:'month'},
-                            {label:'최근 3개월', value:'3month'}
-                        ]}
-                        placeholder={{label:'범위를 선택해주세요.'}}
-                        style={{inputAndroid:{color:'black'}}}
-                    />
-                </View>
-            );
-        }
-        
-        if (platform==='ios'){
-            result = result.concat(
-                <View style={styles.pickerView}>
-                    <RNPickerSelect
-                        doneText={"확인"}
-                        value={value}
-                        onValueChange={(value)=>gettingList(value)} 
-                        items={[
-                            {label:'이번 주', value:'week'},
-                            {label:'이번 달', value:'month'},
-                            {label:'최근 3개월', value:'3month'}
-                        ]}
-                        placeholder={{label:'범위를 선택해주세요.'}}
-                        Icon={()=>{
-                            return <Icon color='black' name='down' size={15} />
-                        }}
-                    />
-                </View>
-            );
-        }
-        return result;
-    }
-
-    const gettingList = async(value) => {
+    const gettingList = async() => {
+        setloading(true);
         setSpinvisible(true);
-        setValue(value);
-        let type = 1;
-        if (value === 'week'){
-            type = 1;
-        }else if (value === 'month'){
-            type = 2;
-        }else if (value === '3month'){
-            type = 3;
-        }
-        const result = await getPeriod(type);
-        setAlarmList(result);
+        const result = await getPeriod(pageNum);
+        setAlarmList(alarmList.concat(result.alarmList));
+        setPageNum(pageNum + 1);
+        setTotalPageCnt(result.totalPageCnt);
+        setloading(false);
         setSpinvisible(false);
     }
 
     useFocusEffect(
         useCallback(()=>{
-            if (Platform.OS === 'android'){
-                setPlatform('android');
+            if(props.navigation.isFocused()){
+                setAlarmList([]);
+                setPageNum(1);
             }
-            if (Platform.OS === 'ios'){
-                setPlatform('ios');
-            }
+            gettingList();
         }, [])
     );
 
-    const mediInfoList = ()=>{
-        let result = [];
-        if(alarmList.length>0){
-            alarmList.map(item=>{
-                result = result.concat(
-                    <MediInfo naviagtion = {props.navigation} func={(alarmId)=>props.navigation.navigate('TimelineDetail',{data:alarmId})} alarmId={item.alarmId} alarmDayStart={item.alarmDayStart} alarmTitle = {item.alarmTitle} alarmDayEnd = {item.alarmDayEnd}/>
-                );
-            })
-        }
-        return result;
-    }
+    const renderItem = ({ item }) => {
+        return(
+          <TimelineInfo item={item} func = {(id)=>props.navigation.navigate('TimelineDetail',{data:id})}/>
+        )
+    };
 
     return (
         <View  style={{ flex: 1, alignItems: 'center', backgroundColor:'#F9F9F9' }}>
             <Spinner visible={spinVisible} />
-            <View style={styles.pickerLayout}>
-                {findPlatform()}
-            </View>
             {alarmList.length>0?(
-                <ScrollView style={{ width:'100%', margin:10}} contentContainerStyle={{alignItems: 'center'}}>
-                    {mediInfoList()}
-                </ScrollView>
+                <View style={{ paddingHorizontal: 20, width:'100%', margin:10}}>
+                    <FlatList 
+                        data={alarmList}
+                        renderItem={renderItem}
+                        onEndReached={() => {if(loading===false && pageNum<=totalPageCnt) gettingList()}}
+                        onEndReachedThreshold={0.1}
+                        keyExtractor={item => item.id}
+                    />
+                </View>
             ):(
                 <View style={{ flex: 1, alignItems: 'center', justifyContent:'center' }}>
-                    <Text style={{fontSize:25, color:'gray'}}>해당되는 알람이 없습니다.</Text>
+                    <Text style={{fontSize:25, color:'gray'}}>지난 알람이 없습니다.</Text>
                 </View>
             )}
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    pickerLayout: {
-        width: '90%',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-    },
-    pickerView: {
-        width: '40%',
-        justifyContent:'center',
-        backgroundColor: 'white',
-        borderWidth: 0.2,
-        borderColor: '#bfbfbf',
-        borderRadius: 5,
-        height: 40,
-        margin: 15,
-        marginBottom: 0,
-        marginRight: 0,
-        paddingLeft: 10,
-        paddingRight:10,
-    },
-    
-})
 
 export default Timeline;

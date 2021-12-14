@@ -13,12 +13,13 @@ import AlarmInfo from '../../pages/AlarmInfo';
 import Alarm from '../../pages/Alarm';
 import Timeline from '../../pages/Timeline';
 import TimelineDetail from '../../pages/TimelineDetail';
+import AlarmDetail from '../../pages/AlarmDetail';
 import Mypage from '../../pages/Mypage';
 import ModifyInfo from '../../pages/ModifyInfo';
-import MyPillHistory from '../../pages/MyPillHistory';
 import MyPillNowPill from '../../pages/MyPillNowPill';
 import MyPillInfo from '../../pages/MyPillInfo';
 import Login from '../../pages/Login';
+import PetPage from '../../pages/Pet';
 
 const MyApp = () => {
 
@@ -50,6 +51,7 @@ const MyApp = () => {
         >
           <Stack.Screen name="AlarmScreen" component={Alarm} />
           <Stack.Screen name="AlarmInfo" component={AlarmInfo} />
+          <Stack.Screen name="AlarmDetail" component={AlarmDetail} />
         </Stack.Navigator>
       )
     }
@@ -94,14 +96,6 @@ const MyApp = () => {
       );
     }
 
-    function MyPillScreen(){
-      return (
-        <Stack.Navigator>
-          <Stack.Screen name="MyPillTab" component={MyPillTop} options={{ headerShown : false }}/>
-        </Stack.Navigator>
-      )
-    }
-
     function HomeNav({navigation}) {
       return (
         <Stack.Navigator 
@@ -126,24 +120,10 @@ const MyApp = () => {
         }}>
           <Stack.Screen name='mypageScreen' component={Mypage} options={{ title: '내 정보' }}/>
           <Stack.Screen name='modifyInfo' component={ModifyInfo} options={{ title: '정보수정' }}/>
-          <Stack.Screen name='mypill' component={MyPillScreen} options={{ title: '마이필' }}/>
+          <Stack.Screen name='mypill' component={NowPillNav} options={{ title: '복용중인 약' }}/>
+          <Stack.Screen name='mypet' component={PetPage} options={{ title: '마이펫' }}/>
         </Stack.Navigator>
       )
-    }
-
-    function MyPillTop() {
-      return (
-        <TopTab.Navigator screenOptions={{
-            headerTitleAlign: 'center',
-            tabBarActiveTintColor:'black', 
-            tabBarIndicatorStyle:{backgroundColor:'black'},
-            tabBarLabelStyle:{fontSize:15},
-            initialRouteName:'NowPill'
-           }}>
-            <TopTab.Screen name='NowPill' component={NowPillNav} options={{title:'복용중인 약'}} />
-            <TopTab.Screen name='PillHistory' component={MyPillHistory} options={{title:'최근 복용 이력'}}/>
-        </TopTab.Navigator>
-      );
     }
 
     function NowPillNav() {
