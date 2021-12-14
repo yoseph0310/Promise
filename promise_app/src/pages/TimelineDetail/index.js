@@ -6,7 +6,6 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FAIcon from 'react-native-vector-icons/FontAwesome5';
 import IIcon from 'react-native-vector-icons/Ionicons';
 import DetailList from '../../components/atoms/DetailList';
-import Moment from 'moment';
 import {getAlarmDetail} from '../../utils/axios';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DivideLine from '../../components/frames/DivideLine';
@@ -97,7 +96,7 @@ const TimelineDetail = (props) => {
             </View>
             <ScrollView style={{width: '100%', margin: 10}} contentContainerStyle={{alignItems: 'center', margin: 10}}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', justifyContent: 'flex-start', height: 40, marginBottom:10 }}>
-                    <Text style={{ fontSize: 25, color: 'black', fontWeight: 'bold', width: '20%' }}>{title}</Text>
+                    <Text style={{ fontSize: 25, color: 'black', fontWeight: 'bold'}}>{title}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', justifyContent: 'flex-start', height: 45 }}>
                     <MCIcon name='calendar-blank' color='#98BBDC' background='white' size={25}/>

@@ -97,7 +97,7 @@ const AlarmDetail = (props) => {
             </View>
             <ScrollView style={{width: '100%'}} contentContainerStyle={{alignItems: 'center', margin: 10}}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', justifyContent: 'flex-start', height: 40, marginBottom:10 }}>
-                    <Text style={{ fontSize: 25, color: 'black', fontWeight: 'bold', width: '20%' }}>{title}</Text>
+                    <Text style={{ fontSize: 25, color: 'black', fontWeight: 'bold' }}>{title}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', justifyContent: 'flex-start', height: 45 }}>
                     <MCIcon name='calendar-blank' color='#98BBDC' background='white' size={25}/>
