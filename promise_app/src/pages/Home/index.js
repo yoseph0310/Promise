@@ -148,7 +148,6 @@ const HomePage = ({navigation}) => {
                 <>
                     {myList.length>0?(
                         <View style={{justifyContent: 'flex-start', width:'100%', height:'100%', alignItems: 'center'}}>
-                            <Text style={{fontSize:22, fontWeight: 'bold', margin:30}}>오늘의 약속</Text>
                             {PromiseList()}
                         </View>
                     ):(

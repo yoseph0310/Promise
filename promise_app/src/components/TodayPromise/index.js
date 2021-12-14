@@ -55,7 +55,7 @@ const TodayPromise = (props) => {
         return result;
     }
     return (
-        <View style={{width:'85%', marginBottom:20}}>
+        <View style={{width:'85%', marginBottom:10, marginTop:10}}>
             <View style={style.AlarmContainer}>
                 <Icon name='bell' size={20} style={style.AlarmMargin}/>
                 <Text style={style.AlarmMargin}>{alarmCnt()}회</Text>
