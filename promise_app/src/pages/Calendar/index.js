@@ -75,7 +75,7 @@ const CalendarPage = ({navigation}) => {
     );
 
     return (
-        <View  style={{ flex: 1, alignItems: 'center', backgroundColor:'#F9F9F9', justifyContent:'center' }}>
+        <View  style={{ flex: 1, alignItems: 'center', backgroundColor:'white', justifyContent:'center' }}>
             <Spinner visible={spinVisible} />
             <Calendar
                 style={styles.calendar}

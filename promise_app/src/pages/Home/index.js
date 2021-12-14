@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import FirstImg from '../../assets/firstHome.png';
 import NoImg from '../../assets/noSchedule.png';
 import TodayPromise from '../../components/TodayPromise';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const HomePage = ({navigation}) => {
     const [spinVisible, setSpinvisible] = useState();
@@ -26,15 +27,16 @@ const HomePage = ({navigation}) => {
             shareList.map(item=>{
                 Alert.alert(
                     '알람 공유 요청',
-                    `${item.userNickname}님의 알람 공유를 수락하시겠습니까?`,
+                    `${item.userNickname}님의 ${item.alarmTitle} 알람 
+공유를 수락하시겠습니까?`,
                     [
                         {
                             text:'예',
-                            onPress: ()=>acceptSharing(item.alarmId)
+                            onPress: ()=>acceptSharing(item.asId)
                         },
                         {
                             text:'아니요',
-                            onPress: ()=>rejectSharing(item.alarmId)
+                            onPress: ()=>rejectSharing(item.asId)
                         }
                     ]
                 )
@@ -157,7 +159,14 @@ const HomePage = ({navigation}) => {
                     )}
                 </>
             ):(
-                <Image source={FirstImg} resizeMode='contain' style={{width:'40%', height:'40%'}}/>
+                <>
+                    <Image source={FirstImg} resizeMode='contain' style={{width:'40%', height:'40%'}}/>
+                    <Text style={{color:'black', fontWeight:'bold', fontSize:18}}>복약 일정을 등록해주세요</Text>
+                    <View style={{flexDirection: "row", marginTop:5, alignItems: 'center'}}>
+                        <Icon name='calendar-blank' color='#838385' size={16}/>
+                        <Text style={{color:'#838385', fontSize:16, marginLeft:5}}>버튼을 누르시면 등록할 수 있습니다</Text>
+                    </View>
+                </>
             )}
         </View>
     );

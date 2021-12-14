@@ -2,6 +2,7 @@ import React, {useState, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import { View, Text, TouchableOpacity, Image, Alert, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {PROFILE_URL} from '../../utils/oauth';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PetIcon from 'react-native-vector-icons/MaterialIcons';
 import Spinner from 'react-native-loading-spinner-overlay';

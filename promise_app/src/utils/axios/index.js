@@ -170,10 +170,8 @@ export const sharingList = async()=>{
 }
 
 export const sharingAccept = async(alarmId)=>{
-  return await request.delete('/sharings/accept',{
-    params:{
-      alarmId: alarmId
-    }
+  return await request.post('/sharings/accept',{
+      asId: alarmId
   }).then((response) => {
     return response.data.statusCode;
   }).catch((err) => {
