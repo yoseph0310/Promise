@@ -112,7 +112,7 @@ export const getMainAlarm = async () => {
   return await request.get(`/alarms/main`, {
     })
     .then(response => {
-      return response.data.alarmList;
+      return response.data;
     });
 };
 
@@ -124,11 +124,11 @@ export const getVisual = async () => {
     });
 };
 
-export const getPeriod = async (periodType) => {
-  return await request.get(`/alarms/${periodType}`, {
+export const getPeriod = async (pageNum) => {
+  return await request.get(`/alarms/${pageNum}`, {
     })
     .then(response => {
-      return response.data.alarmList;
+      return response.data;
     }).catch(err => {
       return err.response.data;
     });
@@ -170,10 +170,8 @@ export const sharingList = async()=>{
 }
 
 export const sharingAccept = async(alarmId)=>{
-  return await request.delete('/sharings/accept',{
-    params:{
-      alarmId: alarmId
-    }
+  return await request.post('/sharings/accept',{
+      asId: alarmId
   }).then((response) => {
     return response.data.statusCode;
   }).catch((err) => {
@@ -374,126 +372,6 @@ export const getPharmacyAPI = async (lat, lon, week, curTime) => {
     .catch(err => {
       return err.response.data;
     });
-}
-
-export const getCommunityAPI = {
-  list: async (pageNum) => {
-    return await request.get('/communities/list', {
-        params: {
-            pageNum: pageNum
-        }
-    })
-    .then((response) => {
-        return response.data;
-    })
-    .catch(err => {
-      return err.response.data;
-    });
-  },
-
-  search: async (pageNum, searchKeyword) => {
-    return await request.post(
-      '/communities/search', 
-      {
-        pageNum,
-        searchKeyword
-      }
-    )
-    .then((response) => {
-      return {
-        ...response.data,
-        searchKeyword: searchKeyword,
-      };
-    })
-    .catch(err => {
-      return err.response.data;
-    });
-  },
-  detail: async (commuId) => {
-    return await request.get(`/communities/detail`, {
-        params: {
-          commuId: commuId
-        }
-    })
-    .then((response) => {
-        return response.data;
-    })
-    .catch(err => {
-      return err.response.data;
-    });
-  },
-  create: async (commuTitle, commuContents) => {
-    return await request.post(
-      `/communities`, 
-      {
-        commuTitle,
-        commuContents,
-      }
-    )
-    .then((response) => {
-        return response.data;
-    })
-    .catch(err => {
-      return err.response.data;
-    });
-  },
-  update: async (commuId, commuTitle, commuContents) => {
-    return await request.put(
-      `/communities`,
-      {
-        commuId,
-        commuTitle,
-        commuContents,
-      }
-    )
-    .then((response) => {
-        return response.data;
-    })
-    .catch(err => {
-      return err.response.data;
-    });
-  },
-  delete: async (commuId, commuTitle, commuContents) => {
-    return await request.delete(`/communities/${commuId}`, {
-        params: {
-          commuId: commuId,
-        }
-    })
-    .then((response) => {
-        return response.data;
-    })
-    .catch(err => {
-      return err.response.data;
-    });
-  },
-  commentCreate: async (commuId, commentContents) => {
-    return await request.post(
-      `/communities/comment`, 
-      {
-        commuId,
-        commentContents,
-      }
-    )
-    .then((response) => {
-        return response.data;
-    })
-    .catch(err => {
-      return err.response.data;
-    });
-  },
-  commentDelete: async (commentId) => {
-    return await request.delete(`/communities/comment/${commentId}`, {
-        params: {
-          commentId: commentId,
-        }
-    })
-    .then((response) => {
-        return response.data;
-    })
-    .catch(err => {
-      return err.response.data;
-    });
-  },
 }
 
 export const getMediListAPI = async searchKeyword => {
