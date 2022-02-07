@@ -3,7 +3,7 @@
       <span id='nav-title-left'>약속</span>
       <nav id='nav-contents-right'>
         <span id='download'>다운로드</span>
-        <span id='download-apple'><a href="#"><img class="download-logo" src="./../assets/apple-logo.png"> Apple Store</a></span>
+        <span id='download-apple'><a href="https://apps.apple.com/kr/app/%EC%95%BD%EC%86%8D/id1594139866"><img class="download-logo" src="./../assets/apple-logo.png"> Apple Store</a></span>
         <span id='download-android'><a href="#"><img class="download-logo" src="./../assets/play-store-logo.png"> Play Store</a></span>
       </nav>
   </header>
