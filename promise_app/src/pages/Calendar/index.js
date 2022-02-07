@@ -1,6 +1,6 @@
 import React, {useState, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import RoundBtn from '../../components/atoms/RoundBtn';
 import {getCalendar} from '../../utils/axios';
@@ -75,11 +75,12 @@ const CalendarPage = ({navigation}) => {
     );
 
     return (
-        <View  style={{ flex: 1, alignItems: 'center', backgroundColor:'#F9F9F9', justifyContent:'center' }}>
+        <View  style={{ flex: 1, alignItems: 'center', backgroundColor:'white', justifyContent:'center' }}>
             <Spinner visible={spinVisible} />
             <Calendar
-                style={{borderRadius:5, width:330}}
+                style={styles.calendar}
                 theme={{todayTextColor:'#83BDFF', arrowColor:'black'}}
+                calendarHeight={350}
                 markingType={'multi-dot'}
                 markedDates={markList}
                 monthFormat={'yyyy년 MM월'}
@@ -99,3 +100,12 @@ const CalendarPage = ({navigation}) => {
     );
 };
 export default CalendarPage;
+
+const styles = StyleSheet.create({
+    calendar: {
+      marginBottom: 10,
+      borderRadius:5, 
+      width:350,
+      height:350
+    }
+});

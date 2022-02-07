@@ -3,13 +3,13 @@ import {RNS3} from 'react-native-aws3';
 import AWS from 'aws-sdk';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { View, Alert  } from 'react-native';
-import {ACCESS_KEY, SECRET_ACCESS_KEY} from '../../utils/oauth';
+import {ACCESS_KEY, SECRET_ACCESS_KEY, PROFILE_URL} from '../../utils/oauth';
 import RoundBtn from '../../components/atoms/RoundBtn';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {myinfo, uploadProfile} from '../../utils/axios';
 
 const BUCKET_REGION = 'ap-northeast-2';
-const S3_BUCKET = 'promise-precure'; 
+const S3_BUCKET = 'precure-promise'; 
 
 AWS.config.update({
     region: BUCKET_REGION,
@@ -56,7 +56,6 @@ function S3Upload(props) {
                         name: filename,
                         type: response.assets[0].type
                     }
-                    
                     Alert.alert(
                         '프로필 이미지',
                         '해당 이미지로 프로필을 바꾸시겠습니까?',
@@ -79,7 +78,7 @@ function S3Upload(props) {
         if(file.uri==='' || file.uri===null) alert('파일을 등록해주세요.');
         else{
             Promise.resolve(loadUserUrl()).then(function(name){
-                if (name != null) {
+                if (name != null || name.length!==0) {
                     const deleteKey = "profile/"+ name
                     
                     const promise_delete = deleteProfile(deleteKey).promise()
@@ -100,9 +99,13 @@ function S3Upload(props) {
                 }else{
                     RNS3.put(file, options)
                     .then((response)=>{
+                        console.log(response);
                         if(response.status===201){
                             sendAPI();
                         }
+                    })
+                    .catch((err)=>{
+                        console.log(err);
                     })
                 }
             });
@@ -110,8 +113,8 @@ function S3Upload(props) {
     }
 
     async function sendAPI(){
-        await uploadProfile(`https://promise-precure.s3.ap-northeast-2.amazonaws.com/profile/${filename}`);
-        props.name(`https://promise-precure.s3.ap-northeast-2.amazonaws.com/profile/${filename}?${new Date()}`);
+        await uploadProfile(`${PROFILE_URL}${filename}`);
+        props.name(`${PROFILE_URL}${filename}?${new Date()}`);
     }
     const deleteProfile = (deleteKey) => new AWS.S3().deleteObject(
     {

@@ -196,7 +196,7 @@ java -jar [생성된 스냅샷파일 이름].jar
 
 # Contributor
 
-|<img src="https://i.imgur.com/TxP2QeJ.png" width="150">|<img src="https://i.imgur.com/cGdJ9mK.png" width="150">|<img src="https://i.imgur.com/GxjOzbo.png" width="150">|<img src="https://i.imgur.com/2CWF5Pc.png" width="150">|<img src="https://i.imgur.com/EBfORSQ.png" width="150">|
-| :--------: | :--------: | :--------: | :--------: | :--------: |
-| **서민영** <a href="https://github.com/smy999"><img src="https://i.imgur.com/SBDd7pE.png" width="20"></a> <br> Minyeong Seo | **서요셉** <a href="https://github.com/yoseph0310"><img src="https://i.imgur.com/SBDd7pE.png" width="20"></a> <br> Yosep Seo | **이가빈** <a href="https://github.com/Ariel-G-Lee"><img src="https://i.imgur.com/SBDd7pE.png" width="20"></a> <br> Gavin Lee | **허애리** <a href="https://github.com/aeriheo"><img src="https://i.imgur.com/SBDd7pE.png" width="20"></a> <br> Aeri Heo | **김지윤** <a href="https://github.com/Helia-17"><img src="https://i.imgur.com/SBDd7pE.png" width="20"></a> <br> Jiyoon Kim |
-|Backend<br>Design|Backend<br>Server|Backend<br>Video Director|Frontend<br> Scenario|Frontend|
+|<img src="https://i.imgur.com/TxP2QeJ.png" width="150">|<img src="https://i.imgur.com/cGdJ9mK.png" width="150">|<img src="https://i.imgur.com/GxjOzbo.png" width="150">|<img src="https://i.imgur.com/2CWF5Pc.png" width="150">|
+| :--------: | :--------: | :--------: | :--------: |
+| **서민영** <a href="https://github.com/smy999"><img src="https://i.imgur.com/SBDd7pE.png" width="20"></a> <br> Minyeong Seo | **서요셉** <a href="https://github.com/yoseph0310"><img src="https://i.imgur.com/SBDd7pE.png" width="20"></a> <br> Yosep Seo | **이가빈** <a href="https://github.com/Ariel-G-Lee"><img src="https://i.imgur.com/SBDd7pE.png" width="20"></a> <br> Gavin Lee | **허애리** <a href="https://github.com/aeriheo"><img src="https://i.imgur.com/SBDd7pE.png" width="20"></a> <br> Aeri Heo | 
+|Backend<br>Design|Backend<br>Server|Backend<br>Video Director|Frontend<br> Scenario|
