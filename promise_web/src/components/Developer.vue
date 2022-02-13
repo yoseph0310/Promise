@@ -50,15 +50,6 @@
             <img class="team-img d-block" src="./../assets/AR.png">
           </a>
         </div>
-        <div class="col align-center text-center developer">
-          <div class="developer-text text-center">
-            <div class="developer-name">김지윤</div>
-            <div class="developer-github">github</div>
-          </div>
-          <a class="d-inline-block" href="https://github.com/Helia-17">
-            <img class="team-img d-block" src="./../assets/JY.png">
-          </a>
-        </div>
       </div>
     </div>
   </div>
