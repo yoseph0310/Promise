@@ -35,13 +35,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User insertUser(UserInsertPostReq userInsertInfo) {
-		User user = new User();
-		
-		user.setUserEmail(userInsertInfo.getUserEmail());
-		user.setUserPassword(passwordEncoder.encode(userInsertInfo.getUserPassword()));
-		user.setUserNickname(userInsertInfo.getUserNickname());
-		user.setUserProfileUrl(userInsertInfo.getUserProfileUrl());
-		user.setUserJoinType(userInsertInfo.getUserJoinType());
+
+		User user = User.builder()
+				.userEmail(userInsertInfo.getUserEmail())
+				.userPassword(passwordEncoder.encode(userInsertInfo.getUserPassword()))
+				.userNickname(userInsertInfo.getUserNickname())
+				.userProfileUrl(userInsertInfo.getUserProfileUrl())
+				.userJoinType(userInsertInfo.getUserJoinType())
+				.build();
 		
 		return userRepository.save(user);
 	}
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
 	public int updateProfile(User user, UserProfilePostReq userProfileInfo) {
 		try {
 			String userProfileUrl = userProfileInfo.getUserProfileUrl();
-			user.setUserProfileUrl(userProfileUrl);
+			user.updateUserProfileUrl(userProfileUrl);
 			userRepository.save(user);
 			return 1;
 		} catch (Exception e) {
