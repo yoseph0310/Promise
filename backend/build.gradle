@@ -17,20 +17,16 @@ configurations {
 	}
 }
 
-// querydsl 설정
+clean {
+	delete file('src/main/generated')
+}
 def querydslDir = 'src/main/generated'
 querydsl {
 	jpa = true
 	querydslSourcesDir = querydslDir
-	//library = "com.querydsl:querydsl-apt"
 }
 
 sourceSets {
-//    main {
-//        java {
-//            srcDirs = ['src/main/java', querydslDir]
-//        }
-//    }
 	main.java.srcDir querydslDir
 }
 configurations {
@@ -48,21 +44,28 @@ repositories {
 }
 
 dependencies {
-	
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// Spring & JPA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
-	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// MySQL
 	runtimeOnly 'mysql:mysql-connector-java'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
 
+	// Gson
 	implementation 'com.google.code.gson:gson:2.8.6'
 
-	// jpa
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// lombok
+	compileOnly 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	// querydsl
 	implementation 'com.querydsl:querydsl-jpa'
@@ -70,7 +73,8 @@ dependencies {
 	// JWT
 	implementation("com.auth0:java-jwt:3.10.3")
 
-
+	// test
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
