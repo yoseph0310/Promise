@@ -7,6 +7,9 @@ application-db.properties
 # Backend JWT Info
 application-jwt.properties
 
+# Backend QueryDsl Generated Dir
+backend/src/main/generated
+
 # Frontend Auth file
 promise_app/src/utils/oauth/index.js
 

@@ -29,6 +29,7 @@ import com.pjt3.promise.request.TakeHistoryPostReq;
 import com.pjt3.promise.response.AlarmCalendarGetRes;
 import com.pjt3.promise.response.AlarmDetailGetRes;
 import com.pjt3.promise.response.AlarmGetRes;
+import com.pjt3.promise.response.AlarmHistoryGetRes;
 import com.pjt3.promise.response.AlarmMainGetRes;
 import com.pjt3.promise.response.AlarmOCRRes;
 import com.pjt3.promise.service.AlarmService;
@@ -204,19 +205,16 @@ public class AlarmController {
 		}
 	}
 
-	@GetMapping("/{periodType}")
-	public ResponseEntity<?> getPastAlarmList(Authentication authentication, @PathVariable int periodType) {
+	@GetMapping("/{pageNum}")
+	public ResponseEntity<?> getPastAlarmList(Authentication authentication, @PathVariable int pageNum) {
 		try {
 
 			PMUserDetails userDetails = (PMUserDetails) authentication.getDetails();
 			User user = userDetails.getUser();
+			
+			AlarmHistoryGetRes alarmHistoryGetRes = alarmService.getPastAlarmList(pageNum, user);
 
-			List<AlarmGetRes> alarmList = alarmService.getPastAlarmList(periodType, user);
-
-			Map<String, List> map = new HashMap<String, List>();
-			map.put("alarmList", alarmList);
-
-			return ResponseEntity.status(200).body(map);
+			return ResponseEntity.status(200).body(alarmHistoryGetRes);
 
 		} catch (NullPointerException e) {
 			return ResponseEntity.status(420).body(BaseResponseBody.of(420, "만료된 토큰입니다."));
@@ -277,12 +275,9 @@ public class AlarmController {
 			PMUserDetails userDetails = (PMUserDetails) authentication.getDetails();
 			User user = userDetails.getUser();
 
-			List<AlarmMainGetRes> alarmList = alarmService.getMainAlarmList(user);
+			AlarmMainGetRes alarmMainGetRes = alarmService.getMainAlarmList(user);
 
-			Map<String, List> map = new HashMap<String, List>();
-			map.put("alarmList", alarmList);
-
-			return ResponseEntity.status(200).body(map);
+			return ResponseEntity.status(200).body(alarmMainGetRes);
 
 		} catch (NullPointerException e) {
 			return ResponseEntity.status(420).body(BaseResponseBody.of(420, "만료된 토큰입니다."));

@@ -5,24 +5,20 @@ import Logo from '../../assets/Promise_Logo.png';
 import GoogleLoginBtn from '../../components/GoogleLoginBtn';
 import AppleLoginBtn from '../../components/AppleLoginBtn';
 import SignInModal from '../../components/SignInModal';
-import NicknameModal from '../../components/NicknameModal';
-import PetModal from '../../components/PetModal';
 import LoginBtn from '../../components/atoms/LoginBtn';
 import LoginModal from '../../components/LoginModal';
+import SocialModal from '../../components/SocialModal';
 import {userAPI} from '../../utils/axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const Login = (props) => {
   const [userModal, setUserModal] = useState(false);
-  const [nickModal, setNickModal] = useState(false);
-  const [petModal, setPetModal] = useState(false);
+  const [socialModal, setSocialModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [profile, setProfile] = useState(null);
-  const [nick, setNick] = useState('');
-  const [petName, setPetName] = useState('');
   const [type, setType] = useState();
   const [spinVisible, setSpinvisible] = useState();
 
@@ -48,7 +44,7 @@ const Login = (props) => {
       const res = await userAPI.social(data.email, pw, data.type);
       setSpinvisible(false);
       if (res === 404) {
-        setNickModal(true);
+        setSocialModal(true);
       }else if(res===402){
         alert('Google 계정으로 가입된 계정입니다. Google로 계속하기를 시도해주세요.');
       }else if(res===403){
@@ -62,31 +58,31 @@ const Login = (props) => {
     setSpinvisible(false);
   };
 
-  const handleUser = (user) => {
-    setId(user.id);
-    setPw(user.pw);
-    setType(0);
-  };
-
-  const resultData = async(petName) =>{
+  const normalData = async(data) =>{
     try{
       setSpinvisible(true);
-      await userAPI.join(id, pw, nick, profile, petName, type);
-      if(type===0){
-        await userAPI.login(id, pw, type)
-        .then((res) =>{
-          setSpinvisible(false);
-          props.navigation.replace('appscreen');
-        });
-      }else if(type===1 || type===2){
-        await userAPI.social(id, pw, type)
-        .then((res) =>{
-          setSpinvisible(false);
-          props.navigation.replace('appscreen');
-        });
-      }
+      await userAPI.join(data.id, data.pw, data.nick, data.profile, data.petName, 0);
+      await userAPI.login(data.id, data.pw, 0)
+      .then((res) =>{
+        setSpinvisible(false);
+        props.navigation.replace('appscreen');
+      });
       setSpinvisible(false);
-      
+    }catch(e){
+      setSpinvisible(false);
+    }
+  };
+
+  const socialData = async(data) =>{
+    try{
+      setSpinvisible(true);
+      await userAPI.join(id, pw, data.nick, profile, data.petName, type);
+      await userAPI.social(id, pw, type)
+      .then((res) =>{
+        setSpinvisible(false);
+        props.navigation.replace('appscreen');
+      });
+      setSpinvisible(false);
     }catch(e){
       setSpinvisible(false);
     }
@@ -137,13 +133,10 @@ const Login = (props) => {
         <LoginModal user={(data)=>NomalLogin(data)} next={(data)=>setLoginModal(data)} exit={(data)=>setLoginModal(data)}/>
       </Modal>
       <Modal animationType={'fade'} transparent={true} visible={userModal}>
-        <SignInModal user={(data)=>handleUser(data)} now={(data)=>setUserModal(data)} next={(data)=>setNickModal(data)} exit={(data)=>setUserModal(data)}/>
+        <SignInModal user={(data)=>normalData(data)} now={(data)=>setUserModal(data)} exit={(data)=>setUserModal(data)}/>
       </Modal>
-      <Modal animationType={'fade'} transparent={true} visible={nickModal}>
-        <NicknameModal usernick={(data)=>setNick(data)} now={(data)=>setNickModal(data)} next={(data)=>setPetModal(data)} exit={(data)=>setNickModal(data)}/>
-      </Modal>
-      <Modal animationType={'fade'} transparent={true} visible={petModal}>
-        <PetModal petname={(data)=>setPetName(data)} now={(data)=>setPetModal(data)} next={(data)=>resultData(data)} exit={(data)=>setPetModal(data)} />
+      <Modal animationType={'fade'} transparent={true} visible={socialModal}>
+        <SocialModal user={(data)=>socialData(data)} now={(data)=>setSocialModal(data)} exit={(data)=>setSocialModal(data)}/>
       </Modal>
     </View>
   )

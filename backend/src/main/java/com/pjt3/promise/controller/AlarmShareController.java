@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pjt3.promise.common.auth.PMUserDetails;
 import com.pjt3.promise.common.response.BaseResponseBody;
 import com.pjt3.promise.entity.User;
-import com.pjt3.promise.repository.UserRepository;
+import com.pjt3.promise.request.AlarmShareAcceptReq;
 import com.pjt3.promise.response.AlarmShareGetRes;
 import com.pjt3.promise.service.AlarmShareService;
 
@@ -56,15 +58,15 @@ public class AlarmShareController {
 
 	}
 	
-	@DeleteMapping("/accept")
-	public ResponseEntity<?> acceptAlarmShare(Authentication authentication, @RequestParam int alarmId){
+	@PostMapping("/accept")
+	public ResponseEntity<?> acceptAlarmShare(Authentication authentication, @RequestBody AlarmShareAcceptReq alarmShareAcceptReq){
 		try {	
 			
 			PMUserDetails userDetails = (PMUserDetails) authentication.getDetails();
 			User user = userDetails.getUser();
 	        
 			int result = 0;
-	        result = alarmShareService.acceptAlarmShare(alarmId);
+	        result = alarmShareService.acceptAlarmShare(user, alarmShareAcceptReq);
 			
 	        if(result == 1) {			
 				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "알람 수락 성공"));
@@ -81,14 +83,14 @@ public class AlarmShareController {
 	}
 	
 	@DeleteMapping("/reject")
-	public ResponseEntity<?> rejectAlarmShare(Authentication authentication, @RequestParam int alarmId){
+	public ResponseEntity<?> rejectAlarmShare(Authentication authentication, @RequestParam int asId){
 		try {	
 	        
 			PMUserDetails userDetails = (PMUserDetails) authentication.getDetails();
 			User user = userDetails.getUser();
 			
 			int result = 0;
-	        result = alarmShareService.rejectAlarmShare(alarmId);
+	        result = alarmShareService.rejectAlarmShare(asId);
 			
 	        if(result == 1) {			
 				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "알람 거절 성공"));

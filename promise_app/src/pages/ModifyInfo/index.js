@@ -37,21 +37,25 @@ const ModifyInfo = ({navigation}) => {
     );
     
     const checkNick = async ()=>{
-        const result = await modifyNick(changeNick);
-        Alert.alert(
-            '중복 확인',
-            result.message,
-            [{
-                text:'확인',
-                onPress: ()=>{}
-            }]
-        );
-        if(result.statusCode!==409){
-            setIsCheck(true);
-            setIdColor('#A6DB9E');
-        }else{
-            setIsCheck(false);
-            setIdColor('#FFABAB');
+        if(changeNick.length<1){
+            alert('한 자리 이상 입력해주세요.');
+        }else{    
+            const result = await modifyNick(changeNick);
+            Alert.alert(
+                '중복 확인',
+                result.message,
+                [{
+                    text:'확인',
+                    onPress: ()=>{}
+                }]
+            );
+            if(result.statusCode!==409){
+                setIsCheck(true);
+                setIdColor('#A6DB9E');
+            }else{
+                setIsCheck(false);
+                setIdColor('#FFABAB');
+            }
         }
     }
 

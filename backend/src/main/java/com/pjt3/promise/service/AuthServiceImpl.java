@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
 				}
 			} else {				
 				if (passwordEncoder.matches(userPassword, user.getUserPassword())) {
-					user.setRefreshToken(refreshToken);
+					user.updateRefreshToken(refreshToken);
 					userRepository.save(user);
 					
 					return new UserLoginPostRes(200, "로그인에 성공하였습니다.", accessToken, refreshToken);				
@@ -95,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
 				}
 			} else {				
 				if (passwordEncoder.matches(userPassword, user.getUserPassword())) {
-					user.setRefreshToken(refreshToken);
+					user.updateRefreshToken(refreshToken);
 					userRepository.save(user);
 					
 					return new UserLoginPostRes(200, "로그인에 성공하였습니다.", accessToken, refreshToken);				
@@ -124,7 +124,7 @@ public class AuthServiceImpl implements AuthService {
 			String newAccessToken = JwtTokenUtil.getToken(userEmail);
 			String newRefreshToken = JwtTokenUtil.getRefreshToken();
 			
-			user.setRefreshToken(newRefreshToken);
+			user.updateRefreshToken(newRefreshToken);
 			userRepository.save(user);
 			
 			TokenPostRes tokenPostRes = new TokenPostRes(200, "토큰 재발급", newAccessToken, newRefreshToken);

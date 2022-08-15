@@ -12,16 +12,20 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pjt3.promise.entity.AlarmShare;
+import com.pjt3.promise.entity.AlarmShareUserMedicine;
 import com.pjt3.promise.entity.MediAlarm;
 import com.pjt3.promise.entity.Tag;
 import com.pjt3.promise.entity.TakeHistory;
 import com.pjt3.promise.entity.User;
 import com.pjt3.promise.entity.UserMedicine;
 import com.pjt3.promise.repository.AlarmShareRepository;
+import com.pjt3.promise.repository.AlarmShareUserMedicineRepository;
 import com.pjt3.promise.repository.MediAlarmRepository;
 import com.pjt3.promise.repository.MediAlarmRepositorySupport;
 import com.pjt3.promise.repository.MedicineRepository;
@@ -36,7 +40,9 @@ import com.pjt3.promise.request.TakeHistoryPostReq;
 import com.pjt3.promise.response.AlarmCalendarGetRes;
 import com.pjt3.promise.response.AlarmDetailGetRes;
 import com.pjt3.promise.response.AlarmGetRes;
+import com.pjt3.promise.response.AlarmHistoryGetRes;
 import com.pjt3.promise.response.AlarmMainGetRes;
+import com.pjt3.promise.response.AlarmMainListGetRes;
 import com.pjt3.promise.response.AlarmOCRRes;
 
 @Service
@@ -73,7 +79,11 @@ public class AlarmServiceImpl implements AlarmService {
 
 	@Autowired
 	MedicineRepositorySupport medicineRepositorySupport;
+	
+	@Autowired
+	AlarmShareUserMedicineRepository AlarmShareUserMedicineRepository;
 
+	@Transactional
 	@Override
 	public int insertAlarm(User user, AlarmPostReq alarmPostReq) {
 
@@ -105,19 +115,22 @@ public class AlarmServiceImpl implements AlarmService {
 				// 대상자를 찾고
 				User sharedUser = userRepository.findUserByUserEmail(sharedEmail);
 
-				// 알람 저장
-				mediAlarm = mediAlarmSetting(sharedUser, alarmPostReq);
-				mediAlarmRepository.save(mediAlarm);
-
-				// 약 내역 저장
-				userMedicineSetting(mediAlarm, alarmPostReq.getAlarmMediList());
-
+				// 공유 알람 저장
 				AlarmShare alarmShare = new AlarmShare();
-				alarmShare.setMediAlarm(mediAlarm);
-				alarmShare.setUser(user);
+				alarmShare.setUser(sharedUser);
+				alarmShare.setSendUser(user);
+				alarmShare.setAlarmTitle(alarmPostReq.getAlarmTitle());
+				alarmShare.setAlarmYN(1);
+				alarmShare.setAlarmTime1(alarmPostReq.getAlarmTime1());
+				alarmShare.setAlarmTime2(alarmPostReq.getAlarmTime2());
+				alarmShare.setAlarmTime3(alarmPostReq.getAlarmTime3());
+				alarmShare.setAlarmDayStart(alarmPostReq.getAlarmDayStart());
+				alarmShare.setAlarmDayEnd(alarmPostReq.getAlarmDayEnd());
 
 				alarmShareRepository.save(alarmShare);
-
+				
+				// 알람 공유 약 저장
+				alarmShareUserMedicineSetting(alarmShare, alarmPostReq.getAlarmMediList());
 			}
 
 			return mediAlarm.getAlarmId();
@@ -149,6 +162,19 @@ public class AlarmServiceImpl implements AlarmService {
 		return mediAlarm;
 	}
 
+	public void alarmShareUserMedicineSetting(AlarmShare alarmShare, List<String> alarmMediList) {
+		for (String mediName : alarmMediList) {
+
+			AlarmShareUserMedicine alarmShareUserMedicine = new AlarmShareUserMedicine();
+			alarmShareUserMedicine.setAlarmShare(alarmShare);
+			alarmShareUserMedicine.setAsumName(mediName);
+			alarmShareUserMedicine.setMedicine(medicineRepository.findMedicineByMediName(mediName));
+
+			AlarmShareUserMedicineRepository.save(alarmShareUserMedicine);
+		}
+
+	}
+	
 	public void userMedicineSetting(MediAlarm mediAlarm, List<String> alarmMediList) {
 		for (String mediName : alarmMediList) {
 
@@ -255,35 +281,34 @@ public class AlarmServiceImpl implements AlarmService {
 	}
 
 	@Override
-	public List<AlarmGetRes> getPastAlarmList(int periodType, User user) {
+	public AlarmHistoryGetRes getPastAlarmList(int pageNum, User user) {
 
-		List<AlarmGetRes> alarmList = null;
-
+		AlarmHistoryGetRes alarmHistoryGetRes = new AlarmHistoryGetRes();
+		
 		Calendar c = Calendar.getInstance();
-
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
 		String today = formatter.format(c.getTime());
-		String startDay = "";
-		if (periodType == 1) { // 이번주
-			c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-			startDay = formatter.format(c.getTime());
+		
+		int limit = 8;
 
-		} else if (periodType == 2) { // 이번달
-			c.set(Calendar.DAY_OF_MONTH, 1);
-			startDay = formatter.format(c.getTime());
-
-		} else if (periodType == 3) { // 최근 3개월
-			c.add(Calendar.MONTH, -2);
-			c.set(Calendar.DAY_OF_MONTH, 1);
-			startDay = formatter.format(c.getTime());
-			System.out.println(startDay);
-		}
-		alarmList = mediAlarmRepositorySupport.getPastAlarmList(today, startDay, user);
-
-		return alarmList;
+		int total = mediAlarmRepositorySupport.getTotalCountPastAlarmList(today, user);
+		int totalPageCnt = calcTotalPageCnt(total, limit);
+		int offset = (pageNum-1)*limit;
+		alarmHistoryGetRes.setTotalPageCnt(totalPageCnt);
+		
+		List<AlarmGetRes> alarmList = mediAlarmRepositorySupport.getPastAlarmList(today, user, limit, offset);
+		alarmHistoryGetRes.setAlarmList(alarmList);
+		
+		return alarmHistoryGetRes;
 	}
 
+    private int calcTotalPageCnt(int total, int limit) {
+        int totalPageCnt = 0;
+        if (total % limit > 0) totalPageCnt = total / limit + 1;
+        else totalPageCnt = total / limit;
+        return totalPageCnt;
+    }
+	
 	@Override
 	public List<AlarmOCRRes> getOCRMediList(String text) {
 		String pattern1 = "^[0-9]*$";
@@ -335,11 +360,19 @@ public class AlarmServiceImpl implements AlarmService {
 	}
 
 	@Override
-	public List<AlarmMainGetRes> getMainAlarmList(User user) {
+	public AlarmMainGetRes getMainAlarmList(User user) {
+		
+		AlarmMainGetRes alarmMainGetRes = new AlarmMainGetRes();
 		LocalDate now = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String today = now.format(formatter);
-		List<AlarmMainGetRes> alarmList = mediAlarmRepositorySupport.getMainAlarmList(user, today);
-		return alarmList;
+		List<AlarmMainListGetRes> alarmList = mediAlarmRepositorySupport.getMainAlarmList(user, today);
+		
+		alarmMainGetRes.setAlarmList(alarmList);
+		long count = mediAlarmRepository.countByUser(user);
+		if(count > 0) alarmMainGetRes.setPreAlarm(true);
+		else alarmMainGetRes.setPreAlarm(false);
+		
+		return alarmMainGetRes;
 	}
 }

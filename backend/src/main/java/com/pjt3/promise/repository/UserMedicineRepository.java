@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface UserMedicineRepository extends JpaRepository<UserMedicine, Integer> {
 	@Transactional
 	void deleteByMediAlarmAlarmId(int alarmId);
+	
 }

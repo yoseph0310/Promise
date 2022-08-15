@@ -13,7 +13,9 @@ import com.pjt3.promise.entity.User;
 import com.pjt3.promise.response.AlarmCalendarGetRes;
 import com.pjt3.promise.response.AlarmDetailGetRes;
 import com.pjt3.promise.response.AlarmGetRes;
+import com.pjt3.promise.response.AlarmHistoryGetRes;
 import com.pjt3.promise.response.AlarmMainGetRes;
+import com.pjt3.promise.response.AlarmMainListGetRes;
 import com.pjt3.promise.response.MediPillGetRes;
 import com.pjt3.promise.response.MyAlarmHistory;
 import com.pjt3.promise.response.MyPillGetRes;
@@ -61,23 +63,34 @@ public class MediAlarmRepositorySupport {
     			qMediAlarm.alarmId, qMediAlarm.alarmTitle,
     			qMediAlarm.alarmDayStart, qMediAlarm.alarmDayEnd))
     			.from(qMediAlarm)
-    			.where(qMediAlarm.user.eq(user), qMediAlarm.alarmYN.eq(1),
+    			.where(qMediAlarm.user.eq(user),
     					qMediAlarm.alarmDayStart.loe(nowDate), qMediAlarm.alarmDayEnd.goe(nowDate))
     			.orderBy(qMediAlarm.alarmId.desc())
     			.fetch();
 		return alarmList;
 	}
 
-	public List<AlarmGetRes> getPastAlarmList(String today, String startDay, User user) {
+	public List<AlarmGetRes> getPastAlarmList(String today, User user, int limit, int offset) {
+
 		List<AlarmGetRes> alarmList = query.select(Projections.bean(AlarmGetRes.class,
     			qMediAlarm.alarmId, qMediAlarm.alarmTitle,
     			qMediAlarm.alarmDayStart, qMediAlarm.alarmDayEnd))
     			.from(qMediAlarm)
-    			.where(qMediAlarm.user.eq(user), qMediAlarm.alarmYN.eq(1),
-    					qMediAlarm.alarmDayEnd.lt(today), qMediAlarm.alarmDayEnd.goe(startDay))
-    			.orderBy(qMediAlarm.alarmId.desc())
+    			.where(qMediAlarm.user.eq(user),
+    					qMediAlarm.alarmDayEnd.lt(today))
+    			.orderBy(qMediAlarm.alarmDayEnd.desc())
+    			.offset(offset)
+                .limit(limit)
     			.fetch();
+		
 		return alarmList;
+	}
+	
+	public int getTotalCountPastAlarmList(String today, User user) {
+		long total = query.select(qMediAlarm)
+    			.from(qMediAlarm)
+    			.where(qMediAlarm.user.eq(user), qMediAlarm.alarmDayEnd.lt(today)).fetchCount();
+		return (int) total;
 	}
 
 	public List<MyPillGetRes> getMyPillList(User user, String today) {
@@ -107,9 +120,9 @@ public class MediAlarmRepositorySupport {
     			qTakeHistory.mediAlarm.alarmTitle, qTakeHistory.thTime, qTakeHistory.mediAlarm.alarmId))
     			.from(qTakeHistory)
     			.where(qTakeHistory.user.eq(user),qTakeHistory.thYN.eq(1))
+                .orderBy(qTakeHistory.thId.desc())
     			.offset(offset)
                 .limit(limit)
-                .orderBy(qTakeHistory.thId.desc())
                 .fetch();
 		
 		for (MyAlarmHistory myAlarmHistory : alarmHistoryList) {
@@ -146,14 +159,23 @@ public class MediAlarmRepositorySupport {
 		return calendarAlarmList;
 	}
 
-	public List<AlarmMainGetRes> getMainAlarmList(User user, String today) {
-		List<AlarmMainGetRes> alarmList = query.select(Projections.bean(AlarmMainGetRes.class,
+	public List<AlarmMainListGetRes> getMainAlarmList(User user, String today) {
+		List<AlarmMainListGetRes> alarmList = query.select(Projections.bean(AlarmMainListGetRes.class,
     			qMediAlarm.alarmId, qMediAlarm.alarmTitle,
     			qMediAlarm.alarmTime1, qMediAlarm.alarmTime2, qMediAlarm.alarmTime3))
     			.from(qMediAlarm)
     			.where(qMediAlarm.user.eq(user), qMediAlarm.alarmDayStart.loe(today), qMediAlarm.alarmDayEnd.goe(today))
     			.orderBy(qMediAlarm.alarmId.asc())
     			.fetch();
+		
+		for(AlarmMainListGetRes item : alarmList) {
+			int id = item.getAlarmId();
+			List<String> mediList = query.select(qUserMedicine.umName)
+					.from(qUserMedicine)
+					.where(qUserMedicine.mediAlarm.alarmId.eq(id))
+					.fetch();
+			item.setMediList(mediList);
+		}
 		return alarmList;
 	}
 

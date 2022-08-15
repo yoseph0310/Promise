@@ -12,18 +12,14 @@ import AlarmAdd from '../../pages/AlarmAdd';
 import AlarmInfo from '../../pages/AlarmInfo';
 import Alarm from '../../pages/Alarm';
 import Timeline from '../../pages/Timeline';
-import CommunityPage from '../../pages/Community';
-import CommunitySearchPage from '../../pages/CommunitySearchPage';
-import PostCreatePage from '../../pages/PostCreate';
-import PostUpdatePage from '../../pages/PostUpdate';
-import PostDetailPage from '../../pages/PostDetail';
 import TimelineDetail from '../../pages/TimelineDetail';
+import AlarmDetail from '../../pages/AlarmDetail';
 import Mypage from '../../pages/Mypage';
 import ModifyInfo from '../../pages/ModifyInfo';
-import MyPillHistory from '../../pages/MyPillHistory';
 import MyPillNowPill from '../../pages/MyPillNowPill';
 import MyPillInfo from '../../pages/MyPillInfo';
 import Login from '../../pages/Login';
+import PetPage from '../../pages/Pet';
 
 const MyApp = () => {
 
@@ -55,6 +51,7 @@ const MyApp = () => {
         >
           <Stack.Screen name="AlarmScreen" component={Alarm} />
           <Stack.Screen name="AlarmInfo" component={AlarmInfo} />
+          <Stack.Screen name="AlarmDetail" component={AlarmDetail} />
         </Stack.Navigator>
       )
     }
@@ -89,21 +86,6 @@ const MyApp = () => {
       );
     }
 
-    function CommunityNav() {
-      return (
-        <Stack.Navigator screenOptions={{
-          headerTitleAlign: 'center',
-          initialRouteName:'community'
-          }}>
-          <Stack.Screen name='community' component={CommunityPage} options={{title:'커뮤니티'}}/>
-          <Stack.Screen name='communitysearch' component={CommunitySearchPage} options={{title:'검색 결과'}}/>
-          <Stack.Screen name='communitywrite' component={PostCreatePage} options={{title:'글 작성'}}/>
-          <Stack.Screen name='communityupdate' component={PostUpdatePage} options={{title:'글 수정'}}/>
-          <Stack.Screen name='communitydetail' component={PostDetailPage} options={{title:''}}/>
-        </Stack.Navigator>
-      );
-    }
-
     function TopTabStackScreen(){
       return(
         <Stack.Navigator screenOptions={{
@@ -114,14 +96,6 @@ const MyApp = () => {
       );
     }
 
-    function MyPillScreen(){
-      return (
-        <Stack.Navigator>
-          <Stack.Screen name="MyPillTab" component={MyPillTop} options={{ headerShown : false }}/>
-        </Stack.Navigator>
-      )
-    }
-
     function HomeNav({navigation}) {
       return (
         <Stack.Navigator 
@@ -130,7 +104,7 @@ const MyApp = () => {
           initialRouteName : 'Homes',
           headerRight: ()=>(<Icon.Button onPress={()=>navigation.navigate('Search', {navigation:`${navigation}`})} name="magnify" color="black" backgroundColor='white' />),
         }}>
-          <Stack.Screen name="Homes" component={HomePage} options={{title: '홈'}}/>
+          <Stack.Screen name="Homes" component={HomePage} options={{title: '오늘의 약속'}}/>
           <Stack.Screen name="Search" component={Search} options={{ title: '검색', headerRight: null }}/>
           <Stack.Screen name="Info" component={Info} options={{ title: '약 정보' }} />
         </Stack.Navigator>
@@ -146,24 +120,10 @@ const MyApp = () => {
         }}>
           <Stack.Screen name='mypageScreen' component={Mypage} options={{ title: '내 정보' }}/>
           <Stack.Screen name='modifyInfo' component={ModifyInfo} options={{ title: '정보수정' }}/>
-          <Stack.Screen name='mypill' component={MyPillScreen} options={{ title: '마이필' }}/>
+          <Stack.Screen name='mypill' component={NowPillNav} options={{ title: '복용중인 약' }}/>
+          <Stack.Screen name='mypet' component={PetPage} options={{ title: '마이펫' }}/>
         </Stack.Navigator>
       )
-    }
-
-    function MyPillTop() {
-      return (
-        <TopTab.Navigator screenOptions={{
-            headerTitleAlign: 'center',
-            tabBarActiveTintColor:'black', 
-            tabBarIndicatorStyle:{backgroundColor:'black'},
-            tabBarLabelStyle:{fontSize:15},
-            initialRouteName:'NowPill'
-           }}>
-            <TopTab.Screen name='NowPill' component={NowPillNav} options={{title:'복용중인 약'}} />
-            <TopTab.Screen name='PillHistory' component={MyPillHistory} options={{title:'최근 복용 이력'}}/>
-        </TopTab.Navigator>
-      );
     }
 
     function NowPillNav() {
@@ -198,7 +158,6 @@ const MyApp = () => {
           <Tab.Screen name="Home" component={HomeNav} options={{tabBarLabel:'홈'}}/>
           <Tab.Screen name="Pharmacy" component={Pharmacy} options={{ title: '약국' }} />
           <Tab.Screen name="CalendarPage" component={TopTabStackScreen} options={{ title: '일정' }} />
-          <Tab.Screen name='CommunityScreen' component={CommunityNav} options={{ title: '커뮤니티' }}/>
           <Tab.Screen name="Mypage" component={MyPageNav} options={{ title: '내 정보' }}/>
         </Tab.Navigator>
         )
